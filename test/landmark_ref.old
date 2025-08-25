@@ -1,0 +1,40 @@
+// var landmarkCoords = {}
+
+// // 1. Soft tissue landmarks
+// landmarkCoords['Soft tissue glabella'] = [487, 21];
+// landmarkCoords['Soft tissue nasion'] = [466, 109];
+// landmarkCoords['Pronasale'] = [550, 260];
+// landmarkCoords['Subnasale'] = [496, 304];
+// landmarkCoords['Soft tissue subspinale'] = [521, 355];
+// landmarkCoords['Labrale superius'] = [527, 378];
+// landmarkCoords['Stomion'] = [500, 407];
+// landmarkCoords['Labrale inferius'] = [510, 435];
+// landmarkCoords['Soft tissue submentale'] = [465, 481];
+// landmarkCoords['Soft tissue pogonion'] = [460, 544];
+// landmarkCoords['Soft tissue gnathion'] = [443, 577];
+
+// // 2. Maxilla landmarks
+// landmarkCoords['Incision superius incisalis'] = [471, 421];
+// landmarkCoords['Prosthion'] = [466, 364];
+// landmarkCoords['Incision superius apicalis'] = [425, 318];
+
+// landmarkCoords['Incision inferius incisalis'] = [442, 398];
+// landmarkCoords['Infradentale'] = [431, 440];
+// landmarkCoords['Incision inferius apicalis'] = [394, 476];
+
+// landmarkCoords['Maxillary first molar'] = [338, 363];
+// landmarkCoords['Mandibular first molar'] = [328, 382];
+
+// landmarkCoords['ANS'] = [461, 298];
+// landmarkCoords['PNS'] = [244, 276];
+
+// landmarkCoords['Point A'] = [448, 321];
+
+
+// //3. Mandible landmarks
+// landmarkCoords['Point B'] = [412, 469];
+// landmarkCoords['Pogonion'] = [407, 529];
+// landmarkCoords['Gnathion'] = [396, 556];
+// landmarkCoords['Menton'] = [371, 568];
+// landmarkCoords['Gonion'] = [104, 405];
+// landmarkCoords['Articulare'] = [87, 210];
