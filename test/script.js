@@ -352,6 +352,9 @@ const points9 = [
     y: (a_max[1] + p_max[1]) / 2 + 10*ratio },
   { x: (p_max[0] + ((a_max[0] + p_max[0]) / 2)) / 2,
     y: p_max[1] + 5*ratio },
+  { x: p_max[0],
+    y: p_max[1] },
+  
 ]
 
 
