@@ -39,8 +39,8 @@ const canvas = document.getElementById('canvas');
 
 // canvas 크기 설정
 // 이후 이것을 이미지의 width, height로 맞출 것
-canvas.ctx = 3000;
-canvas.ctx = 3000;
+canvas.width = 3000;
+canvas.height = 3000;
 
 // 원본 이미지의 height 크기 정보를 받은 후,
 // predict되지 않은 임의의 point들의 추정에 사용되는 ratio 계산
@@ -348,10 +348,161 @@ const points8 = [
 
 // Maxilla 1st molar
 const points9 = [
-  { x: (a_max[0] + p_max[0]) / 2,
-    y: (a_max[1] + p_max[1]) / 2 + 10*ratio },
-  { x: (p_max[0] + ((a_max[0] + p_max[0]) / 2)) / 2,
-    y: p_max[1] + 5*ratio },
+  // a_max를 기준으로, 둥근 모양들을 만들어 주는 과정
+  { x: a_max[0] + ((a_max[0] - p_max[0]) * 1/4),
+    y: a_max[1] - 15 * ratio},
+  { x: a_max[0] + ((a_max[0] - p_max[0]) * 1/4),
+    y: a_max[1]},
+  { x: a_max[0],
+    y: a_max[1] + 5 * ratio},
+  
+  // { x: 322, y: 369 },
+  { x: a_max[0] - ((a_max[0] - p_max[0]) * 1/6),
+    y: a_max[1] + 5*ratio},
+  
+  // 가운데 point
+  { x: a_max[0] - ((a_max[0] - p_max[0]) * 3/6),
+    y: a_max[1] - 5*ratio},
+  
+  // { x: 298, y: 363 },
+  { x: a_max[0] - ((a_max[0] - p_max[0]) * 5/6),
+    y: p_max[1] + 5*ratio},
+  
+  // { x: 289, y: 343 },
+  { x: p_max[0],
+    y: p_max[1] + 2*ratio},
+    
+  // { x: 304, y: 320 },
+  { x: p_max[0] - ((a_max[0] - p_max[0]) * 1/6),
+    y: p_max[1] - 5*ratio},
+  
+  // point들 간에 곡선을 더욱 보강해주기 위한 추가점
+  { x: p_max[0] - ((a_max[0] - p_max[0]) * 1/15),
+    y: p_max[1] - ((p_max[1] - max_1st[1]) * 1/3)},
+  
+  { x: p_max[0],
+    y: p_max[1] - ((p_max[1] - max_1st[1]) * 1/3)},
+  { x: p_max[0],
+    y: p_max[1] - ((p_max[1] - max_1st[1]) * 2/5)},
+]
+
+const points10 = [
+  // { x: 304, y: 320 },
+  { x: p_max[0],
+    y: p_max[1] - ((p_max[1] - max_1st[1]) * 2/5)},
+  // { x: 313, y: 301 },
+  { x: (p_max[0] + max_1st[0])/2,
+    y: p_max[1] - ((p_max[1] - max_1st[1]) * 2/3)},
+  
+  // { x: 324, y: 281 },
+  { x: max_1st[0] - 2*ratio,
+    y: max_1st[1] - 2*ratio},
+  { x: max_1st[0],
+    y: max_1st[1]},
+    { x: max_1st[0] + 2*ratio,
+    y: max_1st[1]} - 2*ratio,
+  
+  // jump_val_1 = 
+  // { x: 327, y: 297 },
+  { x: max_1st[0] + ((a_max[0] - p_max[0]) * 1/8)*ratio,
+    y: max_1st[1] + ((a_max[1] - p_max[1]) * 1/8)*ratio},
+  // { x: 327, y: 297 },
+  { x: max_1st[0] + ((a_max[0] - p_max[0]) * 2/8)*ratio,
+    y: max_1st[1] + 20*ratio},
+  // { x: 328, y: 314 },
+  { x: max_1st[0] + ((a_max[0] - p_max[0]) * 4/8)*ratio,
+    y: max_1st[1] + ((a_max[1] - p_max[1]) * 4/8)*ratio},
+  // { x: 337, y: 299 },
+  { x: max_1st[0] + ((a_max[0] - p_max[0]) * 5/8)*ratio,
+    y: max_1st[1]},
+  // { x: 346, y: 288 },
+  { x: max_1st[0] + ((a_max[0] - p_max[0]) * 6/8)*ratio,
+    y: max_1st[1]+ ((a_max[0] - p_max[0]) * 6/8)*ratio},
+  { x: a_max[0] + ((a_max[0] - p_max[0]) * 1/4),
+    y: a_max[1] - 15 * ratio},
+]
+
+
+////////////////////////////////
+
+
+// Mandible 1st molar
+const points11 = [
+  // a_man을 기준으로, 둥근 모양들을 만들어 주는 과정
+  { x: a_man[0] - 0.5*ratio,
+    y: a_man[1] + 15*ratio},
+  // { x: 328, y: 382 },
+  { x: a_man[0] + ((a_man[0] - p_man[0]) * 1/6),
+    y: a_man[1]},
+  // { x: 323, y: 375 },
+  { x: a_man[0],
+    y: a_man[1] - 5*ratio},
+  
+  // { x: 323, y: 375 },
+  { x: a_man[0] - ((a_man[0] - p_man[0]) * 1/6),
+    y: a_man[1] - 5*ratio},
+  
+  // 가운데 point
+  { x: a_man[0] - ((a_man[0] - p_man[0]) * 3/6),
+    y: a_man[1] + 2*ratio},
+  
+  // { x: 294, y: 364 },
+  { x: a_man[0] - ((a_man[0] - p_man[0]) * 5/6),
+    y: p_man[1] - 4*ratio},
+  
+  
+  { x: p_man[0],
+    y: p_man[1] + 2*ratio},
+  
+  
+  { x: p_man[0] - ((a_man[0] - p_man[0]) * 1/6),
+    y: p_man[1] + 5*ratio},
+  
+  // point들 간에 곡선을 더욱 보강해주기 위한 추가점
+  { x: p_man[0] - ((a_man[0] - p_man[0]) * 1/15),
+    y: p_man[1] + ((man_1st[1] - p_man[1]) * 1/3)},
+  // { x: p_man[0],
+  //   y: p_man[1] + ((man_1st[1] - p_man[1]) * 1/3)},
+  { x: p_man[0],
+    y: p_man[1] + ((man_1st[1] - p_man[1]) * 2/5)},
+]
+
+const points12 = [
+  // { x: 318, y: 397 },
+  { x: p_man[0],
+    y: p_man[1] + ((man_1st[1] - p_man[1]) * 2/5)},
+  // { x: 304, y: 422 },
+  { x: (p_man[0] + man_1st[0])/2,
+    y: p_man[1] + ((man_1st[1] - p_man[1]) * 2/3)},
+  
+  // { x: 284, y: 450 },
+  { x: man_1st[0] - 2*ratio,
+    y: man_1st[1] + 2*ratio},
+  { x: man_1st[0],
+    y: man_1st[1]},
+  { x: man_1st[0] + 2*ratio,
+    y: man_1st[1] + 2*ratio},
+  
+  
+  // jump_val_1
+  { x: man_1st[0] + ((a_man[0] - p_man[0]) * 1/5)*ratio,
+    y: man_1st[1] - ((a_man[1] - p_man[1]) * 1/5)*ratio},
+
+  // { x: 289, y: 409 },
+  { x: man_1st[0] + ((a_man[0] - p_man[0]) * 2/5)*ratio,
+    y: man_1st[1] - 15*ratio},
+
+  // { x: 273, y: 424 },
+  { x: man_1st[0] + ((a_man[0] - p_man[0]) * 4/7)*ratio,
+    y: man_1st[1] - 15*ratio},
+  // { x: 255, y: 437 },
+  { x: man_1st[0] + ((a_man[0] - p_man[0]) * 3/5)*ratio,
+    y: man_1st[1] - ((a_man[1] - p_man[1]) * 1/4)*ratio},
+  // { x: 265, y: 408 },
+  { x: man_1st[0] + ((a_man[0] - p_man[0]) * 4/5)*ratio,
+    y: man_1st[1] + ((a_man[1] - p_man[1]) * 6/8)*ratio},
+  { x: a_man[0] - 0.5*ratio,
+    y: a_man[1] + 15*ratio},
 ]
 
 
@@ -360,7 +511,7 @@ const points9 = [
 const ctx = canvas.getContext('2d');
 contours_list = [points, points2, points3, points4,
   points5, points6, points7, points8,
-  points9];
+  points9, points10, points11, points12];
 
 // 곡선을 부드럽게 연결 (quadraticCurveTo를 사용한 경우)
 ctx.strokeStyle = 'white';
