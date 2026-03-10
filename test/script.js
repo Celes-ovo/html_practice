@@ -1,7 +1,3 @@
-// our modules
-// import drawLandmarks from './draw.js';
-
-
 // Landmark 좌표들이 저장된 dict를 입력받았을 때,
 // 이를 기반으로 자동적으로 그리는 기능을 만듦
 
@@ -19,20 +15,57 @@
 //   "Stomion": [1313, 1474], "Labrale inferius": [1345, 1527], "Soft tissue submentale": [1283, 1580],
 //   "Soft tissue pogonion": [1292, 1668], "Soft tissue gnathion": [1252, 1751]}
 
-var landmarkCoords = {"Nasion": [707, 392], "Sella": [458, 422], "Porion": [370, 505], 
-  "Pterygoid point": [520, 506], "Basion": [370, 582], "Articulare": [393, 552], "Orbitale": [662, 505], 
-  "ANS": [709, 602], "PNS": [535, 608], "Point A": [701, 619], "Prosthion": [718, 669], 
-  "Incision superius apicalis": [692, 646], "Incision superius incisalis": [718, 699], 
-  "Incision inferius incisalis": [705, 699], "Incision inferius apicalis": [672, 751], 
-  "Infradentale": [697, 728], "Point B": [683, 754], "Pogonion": [697, 826], 
-  "Gnathion": [690, 841], "Menton": [669, 846], "Gonion": [436, 744], 
-  "Anterior Maxillary first molar": [625, 672], "Posterior Maxillary first molar": [593, 670], 
-  "Maxillary first root": [603, 619], "Anterior Mandibular first molar": [632, 695], 
-  "Posterior Mandibular first molar": [592, 687], "Mandibular first root": [589, 740], 
-  "Soft tissue glabella": [741, 349], "Soft tissue nasion": [720, 422], "Pronasale": [804, 563], 
-  "Subnasale": [756, 607], "Soft tissue subspinale": [759, 649], "Labrale superius": [771, 678], 
-  "Stomion": [743, 704], "Labrale inferius": [758, 723], "Soft tissue submentale": [729, 760], 
-  "Soft tissue pogonion": [733, 827], "Soft tissue gnathion": [722, 850]}
+
+function findRightTop(p1, p3, p4) {
+    // 두 벡터의 뺄셈 (v1 - v2)
+    const subtract = (v1, v2) => [v1[0] - v2[0], v1[1] - v2[1]];
+
+    // 두 벡터의 덧셈 (v1 + v2)
+    const add = (v1, v2) => [v1[0] + v2[0], v1[1] + v2[1]];
+
+    // 벡터에 상수를 곱함 (v1 * s)
+    const multiply = (v1, s) => [v1[0] * s, v1[1] * s];
+
+    // 두 벡터의 내적 (Dot Product)
+    const dot = (v1, v2) => v1[0] * v2[0] + v1[1] * v2[1];
+
+    // 벡터의 길이(Magnitude) 구하기
+    const magnitude = (v) => Math.sqrt(v[0] ** 2 + v[1] ** 2);
+    
+    // 1. 밑변 벡터 (Left Bottom -> Right Bottom)
+    const bottomVector = subtract(p3, p4);
+    const bottomLen = magnitude(bottomVector);
+    
+    // 2. 밑변의 단위 벡터 (u)
+    const u = multiply(bottomVector, 1 / bottomLen);
+    
+    // 3. 빗변 벡터 (Left Bottom -> Left Top)
+    const sideVector = subtract(p1, p4);
+    
+    // 4. 투영 거리 (Offset): 윗변이 밑변에 비해 얼마나 안쪽으로 들어와 있는가
+    const offsetDist = dot(sideVector, u);
+    
+    // 5. 윗변의 길이 계산 (등변사다리꼴 성질: 밑변 - 2 * offset)
+    const topLen = bottomLen - (2 * offsetDist);
+    
+    // 6. 우상단 좌표 (p2) = 좌상단(p1) + (윗변 길이 * 단위 벡터)
+    const rightTop = add(p1, multiply(u, topLen));
+    
+    return rightTop;
+};
+
+
+var landmarkCoords = {"Nasion": [663, 164], "Sella": [471, 206], "Porion": [387, 261], "Pterygoid point": [517, 258],
+  "Basion": [400, 332], "Articulare": [418, 308], "Orbitale": [642, 251], "ANS": [684, 335], "PNS": [528, 340],
+  "Point A": [676, 356], "Prosthion": [703, 403], "Incision superius apicalis": [677, 384],
+  "Incision superius incisalis": [705, 433], "Incision inferius incisalis": [682, 420],
+  "Incision inferius apicalis": [647, 458], "Infradentale": [670, 443], "Point B": [647, 470],
+  "Pogonion": [640, 533], "Gnathion": [634, 545], "Menton": [620, 549], "Gonion": [439, 451],
+  "Anterior Maxillary first molar": [608, 414], "Posterior Maxillary first molar": [576, 408], "Maxillary first root": [587, 365],
+  "Anterior Mandibular first molar": [602, 423], "Posterior Mandibular first molar": [573, 416], "Mandibular first root": [564, 462],
+  "Soft tissue glabella": [688, 126], "Soft tissue nasion": [686, 203], "Pronasale": [753, 310], "Subnasale": [718, 349],
+  "Soft tissue subspinale": [726, 380], "Labrale superius": [737, 408], "Stomion": [716, 429], "Labrale inferius": [721, 448],
+  "Soft tissue submentale": [693, 470], "Soft tissue pogonion": [686, 522], "Soft tissue gnathion": [670, 548]}
 
 const canvas = document.getElementById('canvas');
 
@@ -47,7 +80,7 @@ canvas.ctx = 3000;
 // Ratio에 가장 큰 영향을 받는 maxilla 1st molar, mandibular 1st molar 사이의
 // Euclidean distance를 기준으로 계산
 // ratio = 1;
-ratio = Math.sqrt( (landmarkCoords['Anterior Maxillary first molar'][0]-landmarkCoords['Anterior Mandibular first molar'][0])**2 + (landmarkCoords['Anterior Maxillary first molar'][1]-landmarkCoords['Anterior Mandibular first molar'][1])**2 ) / 21.47;
+ratio = Math.sqrt( (landmarkCoords['Anterior Maxillary first molar'][0]-landmarkCoords['Posterior Maxillary first molar'][0])**2 + (landmarkCoords['Anterior Maxillary first molar'][1]-landmarkCoords['Posterior Maxillary first molar'][1])**2 ) / 21.47;
 ///////////////////////////////////////////////////////////
 // 여러 번 쓰이기 때문에, point들을 쓰기 편한 변수로 미리 정의함.
 a_max = landmarkCoords['Anterior Maxillary first molar'];
@@ -57,6 +90,66 @@ max_1st = landmarkCoords['Maxillary first root'];
 a_man = landmarkCoords['Anterior Mandibular first molar'];
 p_man = landmarkCoords['Posterior Mandibular first molar'];
 man_1st = landmarkCoords['Mandibular first root'];
+///////////////////////////////////////////////////////////
+
+// Functions
+// 점을 표현하기 위한 간단한 헬퍼
+function point(x, y) {
+  return { x, y };
+}
+
+// 벡터/점 연산 헬퍼
+function sub(a, b) {
+  return { x: a.x - b.x, y: a.y - b.y };
+}
+
+function add(a, b) {
+  return { x: a.x + b.x, y: a.y + b.y };
+}
+
+function mul(a, k) {
+  return { x: a.x * k, y: a.y * k };
+}
+
+function dot(a, b) {
+  return a.x * b.x + a.y * b.y;
+}
+
+
+// 평행사변형의 좌상단 A, 좌하단 B, 우하단 C 가 주어졌을 때 우상단 D 계산
+function rightTop(A, B, C) {
+  // 1) 대각선 AC 중점 O
+  const O = point((A.x + C.x) / 2, (A.y + C.y) / 2);
+
+  // 2) 왼쪽 변 AB 방향 벡터 v
+  const v = sub(B, A); // B - A
+
+  // 3) v 에 수직인 방향 벡터 n (대칭축의 방향)
+  const n = point(-v.y, v.x);
+
+  // 4) A 를 O 기준으로 옮긴 벡터 w = A - O
+  const w = sub(A, O);
+
+  // 5) w 를 n 에 투영한 계수 t = (w·n) / (n·n)
+  const nn = dot(n, n);
+  if (nn === 0) {
+    throw new Error("A와 B가 같은 점입니다. 유효한 사다리꼴이 아닙니다.");
+  }
+  const t = dot(w, n) / nn;
+
+  // 6) 투영 벡터 p = t * n
+  const p = mul(n, t);
+
+  // 7) 반사된 벡터 w' = 2p - w
+  const w_reflected = sub(mul(p, 2), w);
+
+  // 8) 최종 D = O + w'
+  const D = add(O, w_reflected);
+
+  return D;
+}
+
+
 ///////////////////////////////////////////////////////////
 
 
@@ -291,17 +384,18 @@ const points7 = [
   
   // 임의의 point 할당
   // 이미 존재하는 point들을 기반으로 최대한 대칭이 되게 해 보자
-  // { x: 352, y: 555 },
-  { x: landmarkCoords['Menton'][0] - (landmarkCoords['Gnathion'][0] - landmarkCoords['Menton'][0]),
-    y: landmarkCoords['Gnathion'][1] },
+  // x: landmarkCoords['Menton'][0] - (landmarkCoords['Gnathion'][0] - landmarkCoords['Menton'][0]),
+  { x: landmarkCoords['Menton'][0] - 2*ratio,
+    y: landmarkCoords['Menton'][1] - 2*ratio},
   
-    // { x: 341, y: 538 },
-  temp_x2 = landmarkCoords['Menton'][0] - (landmarkCoords['Pogonion'][0] - landmarkCoords['Menton'][0]),
-  { x: (temp_x2 + landmarkCoords['Menton'][0]) / 2,
-    // y: (landmarkCoords['Pogonion'][1] + landmarkCoords['Menton'][1]) / 2 + 10*ratio },
-    y: (landmarkCoords['Pogonion'][1] + landmarkCoords['Menton'][1]) / 2 + 10*ratio },
+  // { x: 341, y: 538 },
+  // { x: (temp_x2 + landmarkCoords['Menton'][0]) / 2,
+  // y: (landmarkCoords['Pogonion'][1] + landmarkCoords['Menton'][1]) / 2 + 10*ratio },
+  { x: landmarkCoords['Menton'][0] - 5*ratio,
+    y: landmarkCoords['Menton'][1] - 5*ratio },
   
     // { x: 341, y: 522 },
+    temp_x2 = landmarkCoords['Menton'][0] - (landmarkCoords['Pogonion'][0] - landmarkCoords['Menton'][0]),
   { x: temp_x2,
     y: landmarkCoords['Pogonion'][1] },
   // { x: 355, y: 489 },
@@ -318,8 +412,10 @@ const points7 = [
 
 const points8 = [
   // { x: 352, y: 555 },
-  { x: landmarkCoords['Menton'][0] - (landmarkCoords['Gnathion'][0] - landmarkCoords['Menton'][0]),
-    y: landmarkCoords['Gnathion'][1] },
+  // { x: landmarkCoords['Menton'][0] - (landmarkCoords['Gnathion'][0] - landmarkCoords['Menton'][0]),
+  //   y: landmarkCoords['Gnathion'][1] },
+  { x: landmarkCoords['Menton'][0],
+    y: landmarkCoords['Menton'][1] },
   
     // { x: 274, y: 502 },
   { x: landmarkCoords['Gonion'][0] + (landmarkCoords['Menton'][0] - landmarkCoords['Gonion'][0]) * 2/3,
@@ -346,16 +442,81 @@ const points8 = [
 ////////////////////////////////////
 
 
-// Maxilla 1st molar
+// Maxilla 1st molar 왼쪽 절반
 const points9 = [
+  // 중점 부분에서 스타트
   { x: (a_max[0] + p_max[0]) / 2,
-    y: (a_max[1] + p_max[1]) / 2 + 10*ratio },
-  { x: (p_max[0] + ((a_max[0] + p_max[0]) / 2)) / 2,
-    y: p_max[1] + 5*ratio },
+    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
+  { x: (a_max[0] + p_max[0]) / 2 - 3*ratio,
+    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
+  
+  // p_max 부근에서의 둥근 부분을 만들어 주는 작업
   { x: p_max[0],
     y: p_max[1] },
+  { x: p_max[0] - 2*ratio,
+    y: p_max[1] - 5*ratio },
   
+  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
+  { x: ((p_max[0] - 2*ratio) + (max_1st[0] - 2*ratio)) / 2 + 3*ratio,
+    y: ((p_max[1] - 5*ratio) + (max_1st[1] + 2*ratio)) / 2 },
+  { x: max_1st[0] - 2*ratio,
+    y: max_1st[1] + 2*ratio },
+  { x: max_1st[0],
+    y: max_1st[1] },
+  { x: max_1st[0] + 2*ratio,
+    y: max_1st[1] + 2*ratio },
+  
+  // 안쪽 중점까지
+  // (max_1st[0] + findRightTop(max_1st, p_max, a_max)[0]) / 2 : 중점의 x좌표
+  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2) - 2*ratio,
+    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
+  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2),
+    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
 ]
+
+// Maxilla 1st molar 오른쪽 절반
+const points10 = [
+  // 중점 부분에서 스타트
+  { x: (a_max[0] + p_max[0]) / 2,
+    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
+  { x: (a_max[0] + p_max[0]) / 2 + 3*ratio,
+    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
+  
+  // a_max 부근에서의 둥근 부분을 만들어 주는 작업
+  { x: a_max[0] - 2*ratio,
+    y: a_max[1] },
+  { x: a_max[0],
+    y: a_max[1] },
+  { x: a_max[0] + 6*ratio,
+    y: a_max[1] - 1*ratio },
+  { x: a_max[0] + 5*ratio,
+    y: a_max[1] - 5*ratio },
+  
+  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
+  // findRightTop 함수 사용
+  { x: ((a_max[0] + 5*ratio) + findRightTop(max_1st, p_max, a_max)[0]) / 2 + 3*ratio,
+    y: ((a_max[1] - 5*ratio) + findRightTop(max_1st, p_max, a_max)[1]) / 2 - 10*ratio },
+  { x: (findRightTop(max_1st, p_max, a_max)[0]) + 3*ratio,
+    y: (findRightTop(max_1st, p_max, a_max)[1]) + 2*ratio },
+  { x: (findRightTop(max_1st, p_max, a_max)[0]),
+    y: (findRightTop(max_1st, p_max, a_max)[1]) },
+  { x: (findRightTop(max_1st, p_max, a_max)[0]) - 1*ratio,
+    y: (findRightTop(max_1st, p_max, a_max)[1]) + 2*ratio},
+
+  // 안쪽 중점까지
+  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2) + 2*ratio,
+    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
+  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2),
+    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
+]
+
+
+/////////////
+// 위의 points9, points10의 구조를 상하 대칭의 구조로, mandibular 1st molar를 위한 point11, point12 제작
+
+// Mandibular 1st molar 위쪽 절반
+
+
 
 
 /////////////////////////////////////////////////
@@ -363,7 +524,7 @@ const points9 = [
 const ctx = canvas.getContext('2d');
 contours_list = [points, points2, points3, points4,
   points5, points6, points7, points8,
-  points9];
+  points9, points10, points11, points12];
 
 // 곡선을 부드럽게 연결 (quadraticCurveTo를 사용한 경우)
 ctx.strokeStyle = 'white';
