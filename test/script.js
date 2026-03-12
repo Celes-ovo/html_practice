@@ -16,6 +16,14 @@
 //   "Soft tissue pogonion": [1292, 1668], "Soft tissue gnathion": [1252, 1751]}
 
 
+// <!-- svg test -->
+//         <svg width="3000" height="3000">
+//             <!-- SVG content goes here -->
+//              <path id="svgPath" d="M6.771,24.439C6.771,24.439,6.8069999999999995,15.218,7.641,9.6C8.475,3.9819999999999993,12.035,-3.5980000000000008,14.407,4.614999999999999S20.426000000000002,33.98,22.545,15.072S28.894000000000002,-0.25900000000000034,31.353,7.190999999999999S31.301000000000002,29.82,33.529,39.055C35.756,48.289,36.855000000000004,52.364,32.388000000000005,56.101C29.482000000000006,58.742,26.525000000000006,59.315,23.633000000000003,57.356C21.871000000000002,56.329,17.729000000000003,55.872,14.209000000000003,57.579C8.214,60.486,5.64,56.595,3.84,54.745C0.3639999999999999,51.172,0.10299999999999976,47.093999999999994,2.9259999999999997,39.675C3.014,39.444,6.509,32.524,6.771,24.439Z" stroke="red" fill="none" />
+// </svg>
+
+
+
 function findRightTop(p1, p3, p4) {
     // 두 벡터의 뺄셈 (v1 - v2)
     const subtract = (v1, v2) => [v1[0] - v2[0], v1[1] - v2[1]];
@@ -53,6 +61,54 @@ function findRightTop(p1, p3, p4) {
     
     return rightTop;
 };
+
+
+
+
+/**
+ * SVG path 데이터를 3개의 기준점을 바탕으로 변환하여 캔버스에 그립니다.
+ * @param {string|SVGPathElement} pathInput - 변환할 SVG path 데이터 문자열 또는 요소
+ * @param {Array} src - 원본 기준점 3개 [{x, y}, {x, y}, {x, y}]
+ * @param {Array} dst - 목표 기준점 3개 [{x, y}, {x, y}, {x, y}]
+ */
+function applyAffineTransform(pathInput, src, dst) {
+    const pathData = typeof pathInput === 'string' ? pathInput : pathInput.getAttribute("d");
+
+    const x1 = src[0].x, y1 = src[0].y;
+    const x2 = src[1].x, y2 = src[1].y;
+    const x3 = src[2].x, y3 = src[2].y;
+
+    const u1 = dst[0].x, v1 = dst[0].y;
+    const u2 = dst[1].x, v2 = dst[1].y;
+    const u3 = dst[2].x, v3 = dst[2].y;
+
+    // 행렬식(Determinant) 계산
+    const det = x1 * (y2 - y3) - y1 * (x2 - x3) + (x2 * y3 - x3 * y2);
+    if (Math.abs(det) < 1e-6) return;
+
+    // 아핀 변환 계수 계산
+    // x' = a*x + c*y + e
+    // y' = b*x + d*y + f
+    const a = (u1 * (y2 - y3) - y1 * (u2 - u3) + (u2 * y3 - u3 * y2)) / det;
+    const b = (v1 * (y2 - y3) - y1 * (v2 - v3) + (v2 * y3 - v3 * y2)) / det;
+    const c = (x1 * (u2 - u3) - u1 * (x2 - x3) + (x2 * u3 - x3 * u2)) / det;
+    const d = (x1 * (v2 - v3) - v1 * (x2 - x3) + (x2 * v3 - x3 * v2)) / det;
+    const e = (x1 * (y2 * u3 - y3 * u2) - y1 * (x2 * u3 - x3 * u2) + u1 * (x2 * y3 - x3 * y2)) / det;
+    const f = (x1 * (y2 * v3 - y3 * v2) - y1 * (x2 * v3 - x3 * v2) + v1 * (x2 * y3 - x3 * y2)) / det;
+
+    ctx.save();
+    // 캔버스 transform matrix 적용
+    ctx.transform(a, b, c, d, e, f);
+    const p = new Path2D(pathData);
+    
+    return p;
+}
+
+
+
+
+
+
 
 
 var landmarkCoords = {"Nasion": [663, 164], "Sella": [471, 206], "Porion": [387, 261], "Pterygoid point": [517, 258],
@@ -451,6 +507,8 @@ const points9 = [
     y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
   
   // p_max 부근에서의 둥근 부분을 만들어 주는 작업
+  { x: p_max[0] + 2*ratio,
+    y: p_max[1] + 2*ratio},
   { x: p_max[0],
     y: p_max[1] },
   { x: p_max[0] - 2*ratio,
@@ -483,14 +541,14 @@ const points10 = [
     y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
   
   // a_max 부근에서의 둥근 부분을 만들어 주는 작업
-  { x: a_max[0] - 2*ratio,
-    y: a_max[1] },
+  { x: a_max[0] - 4*ratio,
+    y: a_max[1] - 2*ratio},
   { x: a_max[0],
     y: a_max[1] },
-  { x: a_max[0] + 6*ratio,
-    y: a_max[1] - 1*ratio },
+  { x: a_max[0] + 1*ratio,
+    y: a_max[1] + 2*ratio },
   { x: a_max[0] + 5*ratio,
-    y: a_max[1] - 5*ratio },
+    y: a_max[1] - 1*ratio },
   
   // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
   // findRightTop 함수 사용
@@ -514,17 +572,87 @@ const points10 = [
 /////////////
 // 위의 points9, points10의 구조를 상하 대칭의 구조로, mandibular 1st molar를 위한 point11, point12 제작
 
-// Mandibular 1st molar 위쪽 절반
+// Mandibular 1st molar 왼쪽 절반 (상하대칭)
+const points11 = [
+  // 중점 부분에서 스타트
+  { x: (a_man[0] + p_man[0]) / 2,
+    y: (a_man[1] + p_man[1]) / 2 + 5*ratio },
+  { x: (a_man[0] + p_man[0]) / 2 - 3*ratio,
+    y: (a_man[1] + p_man[1]) / 2 + 3*ratio },
+  
+  // p_man 부근에서의 둥근 부분을 만들어 주는 작업
+  { x: p_man[0] + 2*ratio,
+    y: p_man[1] + 2*ratio},
+  { x: p_man[0],
+    y: p_man[1] },
+  { x: p_man[0] - 2*ratio,
+    y: p_man[1] + 5*ratio },
+  
+  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
+  { x: ((p_man[0] - 2*ratio) + (man_1st[0] - 2*ratio)) / 2 + 3*ratio,
+    y: ((p_man[1] + 5*ratio) + (man_1st[1] - 2*ratio)) / 2 },
+  { x: man_1st[0] - 2*ratio,
+    y: man_1st[1] - 2*ratio },
+  { x: man_1st[0],
+    y: man_1st[1] },
+  { x: man_1st[0] + 2*ratio,
+    y: man_1st[1] - 2*ratio },
+  
+  // 안쪽 중점까지
+  // (man_1st[0] + findRightTop(man_1st, p_man, a_man)[0]) / 2 : 중점의 x좌표
+  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2) - 2*ratio,
+    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
+  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2),
+    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
+]
 
+// Mandibular 1st molar 오른쪽 절반 (상하대칭)
+const points12 = [
+  // 중점 부분에서 스타트
+  { x: (a_man[0] + p_man[0]) / 2,
+    y: (a_man[1] + p_man[1]) / 2 + 5*ratio },
+  { x: (a_man[0] + p_man[0]) / 2 + 3*ratio,
+    y: (a_man[1] + p_man[1]) / 2 + 3*ratio },
+  
+  // a_man 부근에서의 둥근 부분을 만들어 주는 작업
+  { x: a_man[0] - 2*ratio,
+    y: a_man[1] },
+  { x: a_man[0],
+    y: a_man[1] },
+  { x: a_man[0] + 6*ratio,
+    y: a_man[1] + 1*ratio },
+  { x: a_man[0] + 5*ratio,
+    y: a_man[1] + 5*ratio },
+  
+  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
+  // findRightTop 함수 사용
+  { x: ((a_man[0] + 5*ratio) + findRightTop(man_1st, p_man, a_man)[0]) / 2 + 3*ratio,
+    y: ((a_man[1] + 5*ratio) + findRightTop(man_1st, p_man, a_man)[1]) / 2 + 10*ratio },
+  { x: (findRightTop(man_1st, p_man, a_man)[0]) + 3*ratio,
+    y: (findRightTop(man_1st, p_man, a_man)[1]) - 2*ratio },
+  { x: (findRightTop(man_1st, p_man, a_man)[0]),
+    y: (findRightTop(man_1st, p_man, a_man)[1]) },
+  { x: (findRightTop(man_1st, p_man, a_man)[0]) - 1*ratio,
+    y: (findRightTop(man_1st, p_man, a_man)[1]) - 2*ratio },
+
+  // 안쪽 중점까지
+  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2) + 2*ratio,
+    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
+  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2),
+    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
+]
 
 
 
 /////////////////////////////////////////////////
 
 const ctx = canvas.getContext('2d');
+// contours_list = [points, points2, points3, points4,
+//   points5, points6, points7, points8,
+//   points9, points10, points11, points12]
+
 contours_list = [points, points2, points3, points4,
-  points5, points6, points7, points8,
-  points9, points10, points11, points12];
+  points5, points6, points7, points8]
 
 // 곡선을 부드럽게 연결 (quadraticCurveTo를 사용한 경우)
 ctx.strokeStyle = 'white';
@@ -545,3 +673,47 @@ for (let k = 0; k < contours_list.length; k++) {
   ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
   ctx.stroke();
 }
+
+
+// ================================
+
+const max_molar =
+`M 410 500 
+Q 300 550 250 500 
+Q 200 450 260 350 
+L 290 260 
+Q 290 140 330 90 
+Q 390 140 400 260 
+Q 410 270 420 260 
+Q 440 140 490 90 
+Q 530 140 530 260 
+L 550 350 
+Q 600 450 560 500 
+Q 510 550 410 500 `
+
+// const max_molar = 
+// `M 350 810 
+// Q 280 850 220 800 
+// Q 180 720 240 610 
+// Q 280 440 310 470 
+// C 350 810 390 200 440 610 
+// Q 500 720 460 790 
+// Q 410 850 350 810 Z`;
+
+const src = [
+    { x: 300, y: 550 }, // 기준점 1
+    { x: 290, y: 140 }, // 기준점 2
+    { x: 600, y: 450 }  // 기준점 3
+];
+
+const dst = [
+    { x: p_max[0], y: p_max[1] },  // p_max
+    { x: max_1st[0], y: max_1st[1] }, // max_1st
+    { x: a_max[0], y: a_max[1] }  // a_max
+];
+
+max_molar_2 = applyAffineTransform(max_molar, src, dst);
+
+ctx.strokeStyle = 'white';
+ctx.lineWidth = 2;
+ctx.stroke(max_molar_2);
