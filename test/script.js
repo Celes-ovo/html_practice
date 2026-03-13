@@ -244,17 +244,20 @@ function applyAffineTransform(pathInput, src, dst) {
 
 
 
-var landmarkCoords = {"Nasion": [663, 164], "Sella": [471, 206], "Porion": [387, 261], "Pterygoid point": [517, 258],
-  "Basion": [400, 332], "Articulare": [418, 308], "Orbitale": [642, 251], "ANS": [684, 335], "PNS": [528, 340],
-  "Point A": [676, 356], "Prosthion": [703, 403], "Incision superius apicalis": [677, 384],
-  "Incision superius incisalis": [705, 433], "Incision inferius incisalis": [682, 420],
-  "Incision inferius apicalis": [647, 458], "Infradentale": [670, 443], "Point B": [647, 470],
-  "Pogonion": [640, 533], "Gnathion": [634, 545], "Menton": [620, 549], "Gonion": [439, 451],
-  "Anterior Maxillary first molar": [608, 414], "Posterior Maxillary first molar": [576, 408], "Maxillary first root": [587, 365],
-  "Anterior Mandibular first molar": [602, 423], "Posterior Mandibular first molar": [573, 416], "Mandibular first root": [564, 462],
-  "Soft tissue glabella": [688, 126], "Soft tissue nasion": [686, 203], "Pronasale": [753, 310], "Subnasale": [718, 349],
-  "Soft tissue subspinale": [726, 380], "Labrale superius": [737, 408], "Stomion": [716, 429], "Labrale inferius": [721, 448],
-  "Soft tissue submentale": [693, 470], "Soft tissue pogonion": [686, 522], "Soft tissue gnathion": [670, 548]}
+var landmarkCoords = {"Nasion": [663, 164], "Sella": [471, 206], "Porion": [387, 261], 
+  "Pterygoid point": [517, 258], "Basion": [400, 332], "Articulare": [418, 308], 
+  "Orbitale": [642, 251], "ANS": [684, 335], "PNS": [528, 340], "Point A": [676, 356], 
+  "Prosthion": [703, 403], "Incision superius apicalis": [677, 384], 
+  "Incision superius incisalis": [705, 433], "Incision inferius incisalis": [682, 420], 
+  "Incision inferius apicalis": [647, 458], "Infradentale": [670, 443], "Point B": [647, 470], 
+  "Pogonion": [640, 533], "Gnathion": [634, 545], "Menton": [620, 549], "Gonion": [439, 451], 
+  "Anterior Maxillary first molar": [608, 414], "Posterior Maxillary first molar": [576, 408], 
+  "Maxillary first root": [587, 365], "Anterior Mandibular first molar": [602, 423], 
+  "Posterior Mandibular first molar": [573, 416], "Mandibular first root": [564, 462], 
+  "Soft tissue glabella": [688, 126], "Soft tissue nasion": [686, 203], "Pronasale": [753, 310], 
+  "Subnasale": [718, 349], "Soft tissue subspinale": [726, 380], "Labrale superius": [737, 408], 
+  "Stomion": [716, 429], "Labrale inferius": [721, 448], "Soft tissue submentale": [693, 470], 
+  "Soft tissue pogonion": [686, 522], "Soft tissue gnathion": [670, 548]}
 
 const canvas = document.getElementById('canvas');
 
@@ -808,7 +811,34 @@ for (let k = 0; k < contours_list.length; k++) {
 }
 
 
-// ================================
+///////////////////////////////////
+
+// maxilla_track = 
+// `M 670 340 
+// Q 590 260 690 240 
+// C 400 40 670 260 190 240 
+// Q 510 280 600 360 `
+
+// const maxills_src = [
+//   { x: 670, y: 340 }, // 기준점 1
+//   { x: 690, y: 240 }, // 기준점 2
+//   { x: 190, y: 240 }, // 기준점 3
+// ];
+// const maxills_dst = [
+//   { x: landmarkCoords['Prosthion'][0], y: landmarkCoords['Prosthion'][1] },
+//   { x: landmarkCoords['ANS'][0], y: landmarkCoords['ANS'][1] },
+//   { x: landmarkCoords['PNS'][0], y: landmarkCoords['PNS'][1] },
+// ]
+
+// maxilla_2 = applyAffineTransform(maxilla_track, maxills_src, maxills_dst);
+
+// ctx.strokeStyle = 'white';
+// ctx.lineWidth = 5;
+// ctx.stroke(maxilla_2);
+
+
+
+//////////////////////////////////////
 
 const max_molar_track =
 `M 410 500 
