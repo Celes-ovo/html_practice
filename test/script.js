@@ -96,6 +96,7 @@ function applyAffineTransform(pathInput, src, dst) {
     const e = (x1 * (y2 * u3 - y3 * u2) - y1 * (x2 * u3 - x3 * u2) + u1 * (x2 * y3 - x3 * y2)) / det;
     const f = (x1 * (y2 * v3 - y3 * v2) - y1 * (x2 * v3 - x3 * v2) + v1 * (x2 * y3 - x3 * y2)) / det;
 
+    ctx.restore();
     ctx.save();
     // 캔버스 transform matrix 적용
     ctx.transform(a, b, c, d, e, f);
@@ -105,7 +106,139 @@ function applyAffineTransform(pathInput, src, dst) {
 }
 
 
+////////////////////////////////////
 
+// function applyProjectiveTransform(pathInput, src, dst, ctx) {
+//     const pathData = typeof pathInput === 'string' ? pathInput : pathInput.getAttribute("d");
+    
+//     if (src.length !== 4 || dst.length !== 4) {
+//         throw new Error("Exactly 4 source and 4 destination points required");
+//     }
+    
+//     // 4점으로부터 3x3 호모그래피 행렬 계산 (DLT 알고리즘)
+//     const H = computeHomography(src, dst);
+    
+//     // Path2D 명령어 파싱 및 변환
+//     const newPath = parseAndTransformPath(pathData, H);
+    
+//     ctx.save();
+//     // 필요시 추가 아핀 변환 적용 가능
+//     // ctx.transform(...);
+    
+//     return newPath;
+// }
+
+// function computeHomography(src, dst) {
+//     // Direct Linear Transformation (DLT)
+//     const A = [];
+    
+//     for (let i = 0; i < 4; i++) {
+//         const x = src[i].x, y = src[i].y;
+//         const u = dst[i].x, v = dst[i].y;
+        
+//         // x' = (h11 x + h12 y + h13) / (h31 x + h32 y + h33)
+//         // → A * h = 0 형태의 방정식 2개
+//         A.push([x, y, 1, 0, 0, 0, -u * x, -u * y, -u]);
+//         A.push([0, 0, 0, x, y, 1, -v * x, -v * y, -v]);
+//     }
+    
+//     // SVD로 해 구하기 (h33=1 정규화)
+//     const { Vt } = numeric.svd(numeric.transpose(A));
+//     const h = Vt[Vt.length - 1]; // singular vector with smallest singular value
+    
+//     const H = [
+//         [h[0], h[1], h[2]],
+//         [h[3], h[4], h[5]],
+//         [h[6], h[7], 1]  // h[8] = 1로 정규화
+//     ];
+    
+//     return H;
+// }
+
+// function transformPoint(x, y, H) {
+//     const px = H[0][0] * x + H[0][1] * y + H[0][2];
+//     const py = H[1][0] * x + H[1][1] * y + H[1][2];
+//     const pw = H[2][0] * x + H[2][1] * y + H[2][2];
+    
+//     return {
+//         x: px / pw,
+//         y: py / pw
+//     };
+// }
+
+// function parseAndTransformPath(pathData, H) {
+//     const tokens = pathData.match(/[a-z][^a-z]*/gi) || [];
+//     const newPath = new Path2D();
+//     let currentCmd = '';
+//     let currentX = 0, currentY = 0;
+//     let startX, startY;
+    
+//     for (let token of tokens) {
+//         const cmd = token[0].toUpperCase();
+//         const args = token.slice(1).match(/[+-]?\d*\.?\d+(?:e[+-]?\d+)?/g).map(Number);
+        
+//         switch (cmd) {
+//             case 'M':
+//                 const mPt = transformPoint(args[0] + (token[0]==='m'?currentX:0), 
+//                                          args[1] + (token[0]==='m'?currentY:0), H);
+//                 currentX = mPt.x;
+//                 currentY = mPt.y;
+//                 startX = currentX;
+//                 startY = currentY;
+//                 newPath.moveTo(currentX, currentY);
+//                 break;
+                
+//             case 'L':
+//                 const lPt = transformPoint(args[0] + (token[0]==='l'?currentX:0), 
+//                                          args[1] + (token[0]==='l'?currentY:0), H);
+//                 newPath.lineTo(lPt.x, lPt.y);
+//                 currentX = lPt.x;
+//                 currentY = lPt.y;
+//                 break;
+                
+//             case 'H':
+//                 const hPt = transformPoint(args[0] + (token[0]==='h'?currentX:0), currentY, H);
+//                 newPath.lineTo(hPt.x, hPt.y);
+//                 currentX = hPt.x;
+//                 break;
+                
+//             case 'V':
+//                 const vPt = transformPoint(currentX, args[0] + (token[0]==='v'?currentY:0), H);
+//                 newPath.lineTo(vPt.x, vPt.y);
+//                 currentY = vPt.y;
+//                 break;
+                
+//             case 'C':
+//                 // cubic bezier (6 args: x1 y1 x2 y2 x y)
+//                 const c1 = transformPoint(args[0] + currentX, args[1] + currentY, H);
+//                 const c2 = transformPoint(args[2] + currentX, args[3] + currentY, H);
+//                 const cEnd = transformPoint(args[4] + currentX, args[5] + currentY, H);
+//                 newPath.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, cEnd.x, cEnd.y);
+//                 currentX = cEnd.x;
+//                 currentY = cEnd.y;
+//                 break;
+                
+//             case 'Q':
+//                 // quadratic bezier (4 args: x1 y1 x y)
+//                 const q1 = transformPoint(args[0] + currentX, args[1] + currentY, H);
+//                 const qEnd = transformPoint(args[2] + currentX, args[3] + currentY, H);
+//                 newPath.quadraticCurveTo(q1.x, q1.y, qEnd.x, qEnd.y);
+//                 currentX = qEnd.x;
+//                 currentY = qEnd.y;
+//                 break;
+                
+//             case 'Z':
+//                 newPath.closePath();
+//                 currentX = startX;
+//                 currentY = startY;
+//                 break;
+//         }
+//     }
+    
+//     return newPath;
+// };
+
+////////////////////////////////////
 
 
 
@@ -651,7 +784,7 @@ const ctx = canvas.getContext('2d');
 //   points5, points6, points7, points8,
 //   points9, points10, points11, points12]
 
-contours_list = [points, points2, points3, points4,
+contours_list = [points, points4,
   points5, points6, points7, points8]
 
 // 곡선을 부드럽게 연결 (quadraticCurveTo를 사용한 경우)
@@ -677,7 +810,7 @@ for (let k = 0; k < contours_list.length; k++) {
 
 // ================================
 
-const max_molar =
+const max_molar_track =
 `M 410 500 
 Q 300 550 250 500 
 Q 200 450 260 350 
@@ -691,29 +824,136 @@ L 550 350
 Q 600 450 560 500 
 Q 510 550 410 500 `
 
-// const max_molar = 
-// `M 350 810 
-// Q 280 850 220 800 
-// Q 180 720 240 610 
-// Q 280 440 310 470 
-// C 350 810 390 200 440 610 
-// Q 500 720 460 790 
-// Q 410 850 350 810 Z`;
+// const dst = [
+//     { x: p_max[0], y: p_max[1] },  // p_max
+//     { x: max_1st[0], y: max_1st[1] }, // max_1st
+//     { x: a_max[0], y: a_max[1] }  // a_max
+// ];
 
-const src = [
-    { x: 300, y: 550 }, // 기준점 1
-    { x: 290, y: 140 }, // 기준점 2
-    { x: 600, y: 450 }  // 기준점 3
+
+// Maxilla 1st molar의 src, dst points
+const max_molar_src = [
+    { x: 250, y: 500 }, // 기준점 1
+    { x: 330, y: 90 }, // 기준점 2
+    { x: 560, y: 500 }, // 기준점 3
+    // { x: 490, y: 500 }, // 기준점 4
 ];
-
-const dst = [
+const max_molar_dst = [
     { x: p_max[0], y: p_max[1] },  // p_max
     { x: max_1st[0], y: max_1st[1] }, // max_1st
     { x: a_max[0], y: a_max[1] }  // a_max
 ];
 
-max_molar_2 = applyAffineTransform(max_molar, src, dst);
+
+max_molar_2 = applyAffineTransform(max_molar_track, max_molar_src, max_molar_dst);
 
 ctx.strokeStyle = 'white';
-ctx.lineWidth = 2;
+ctx.lineWidth = 10;
 ctx.stroke(max_molar_2);
+
+
+////////////////////////////
+
+const man_molar_track = 
+`M 410 500
+Q 300 450 250 500
+Q 200 550 260 650
+L 290 740
+Q 290 860 330 910
+Q 390 860 400 740
+Q 410 730 420 740
+Q 440 860 490 910
+Q 530 860 530 740
+L 550 650
+Q 600 550 560 500
+Q 510 450 410 500 Z`
+
+// Mandible 1st molar의 src, dst points
+const man_molar_src = [
+  { x: 330, y: 910 }, // 기준점 1
+  { x: 250, y: 500 }, // 기준점 2
+  { x: 560, y: 500 }, // 기준점 3
+];
+const man_molar_dst = [
+  { x: man_1st[0], y: man_1st[1] }, // man_1st
+  { x: p_man[0], y: p_man[1] },  // p man
+  { x: a_man[0], y: a_man[1] }  // a man
+];
+
+man_molar_2 = applyAffineTransform(man_molar_track, man_molar_src, man_molar_dst);
+ctx.strokeStyle = 'white';
+ctx.lineWidth = 10;
+ctx.stroke(man_molar_2);
+
+/////////////////////////////////
+
+const incisor_sup_track =
+`M 480 460
+Q 500 440 510 400
+Q 530 340 500 260
+Q 490 190 410 140
+Q 380 120 380 210
+L 390 290
+C 390 380 430 340 450 420
+Q 460 470 480 460 Z`
+
+// Incisor superius의 src, dst points
+const incisor_sup_src = [
+  { x: 480, y: 460 }, // 기준점 1
+  { x: 500, y: 260 }, // 기준점 2
+  { x: 410, y: 140 }, // 기준점 3
+];
+const incisor_sup_dst = [
+  { x: landmarkCoords['Incision superius incisalis'][0], y: landmarkCoords['Incision superius incisalis'][1] },
+  { x: landmarkCoords['Prosthion'][0], y: landmarkCoords['Prosthion'][1] },
+  { x: landmarkCoords['Incision superius apicalis'][0], y: landmarkCoords['Incision superius apicalis'][1] }
+];
+
+incisor_superius_2 = applyAffineTransform(
+  incisor_sup_track,
+  incisor_sup_src, 
+  incisor_sup_dst
+);
+
+ctx.strokeStyle = 'white';
+ctx.lineWidth = 10;
+ctx.stroke(incisor_superius_2);
+
+
+//////////////////////////////////
+
+const incisor_inf_track =
+`M 480 540
+Q 500 560 510 600
+Q 530 660 500 740
+Q 490 810 410 860
+Q 380 880 380 790
+L 390 710
+C 390 620 430 660 450 580
+Q 460 530 480 540 Z`
+
+// Incisor inferius의 src, dst points
+const incisor_inferius_src = [
+  { x: 410, y: 860 }, // 기준점 3
+  { x: 480, y: 540 }, // 기준점 1
+  { x: 500, y: 740 }, // 기준점 2
+];
+const incisor_inferius_dst = [
+  { x: landmarkCoords['Incision inferius apicalis'][0], y: landmarkCoords['Incision inferius apicalis'][1] },
+  { x: landmarkCoords['Incision inferius incisalis'][0], y: landmarkCoords['Incision inferius incisalis'][1] },
+  { x: landmarkCoords['Infradentale'][0], y: landmarkCoords['Infradentale'][1] },
+];
+
+incisor_inferius_2 = applyAffineTransform(
+  incisor_inf_track,
+  incisor_inferius_src, 
+  incisor_inferius_dst
+);
+
+ctx.strokeStyle = 'white';
+ctx.lineWidth = 10;
+ctx.stroke(incisor_inferius_2);
+
+
+
+//////////////////////////////////
