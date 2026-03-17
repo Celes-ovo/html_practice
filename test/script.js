@@ -235,37 +235,54 @@ function applyAffineTransform(pathInput, src, dst) {
 //   "Soft tissue pogonion": [686, 522], "Soft tissue gnathion": [670, 548]}
 
 
-// // M0002
-// var landmarkCoords = {"Nasion": [669, 131], "Sella": [472, 167], "Porion": [393, 232],
-//   "Pterygoid point": [516, 219], "Basion": [395, 303], "Articulare": [416, 275],
-//   "Orbitale": [643, 221], "ANS": [691, 317], "PNS": [535, 328], "Point A": [678, 342],
-//   "Prosthion": [696, 394], "Incision superius apicalis": [676, 367], "Incision superius incisalis": [696, 428],
-//   "Incision inferius incisalis": [683, 412], "Incision inferius apicalis": [668, 465],
-//   "Infradentale": [685, 441], "Point B": [671, 478], "Pogonion": [678, 533], "Gnathion": [671, 551],
-//   "Menton": [650, 553], "Gonion": [451, 456], "Anterior Maxillary first molar": [605, 399],
-//   "Posterior Maxillary first molar": [571, 395], "Maxillary first root": [586, 352],
-//   "Anterior Mandibular first molar": [613, 415], "Posterior Mandibular first molar": [579, 408],
-//   "Mandibular first root": [577, 456], "Soft tissue glabella": [698, 82], "Soft tissue nasion": [690, 162],
-//   "Pronasale": [770, 308], "Subnasale": [726, 337], "Soft tissue subspinale": [733, 367],
-//   "Labrale superius": [744, 392], "Stomion": [724, 413], "Labrale inferius": [738, 434],
-//   "Soft tissue submentale": [714, 463], "Soft tissue pogonion": [716, 526], "Soft tissue gnathion": [705, 549]}
+// M0002
+var landmarkCoords = {"Nasion": [669, 131], "Sella": [472, 167], "Porion": [393, 232],
+  "Pterygoid point": [516, 219], "Basion": [395, 303], "Articulare": [416, 275],
+  "Orbitale": [643, 221], "ANS": [691, 317], "PNS": [535, 328], "Point A": [678, 342],
+  "Prosthion": [696, 394], "Incision superius apicalis": [676, 367], "Incision superius incisalis": [696, 428],
+  "Incision inferius incisalis": [683, 412], "Incision inferius apicalis": [668, 465],
+  "Infradentale": [685, 441], "Point B": [671, 478], "Pogonion": [678, 533], "Gnathion": [671, 551],
+  "Menton": [650, 553], "Gonion": [451, 456], "Anterior Maxillary first molar": [605, 399],
+  "Posterior Maxillary first molar": [571, 395], "Maxillary first root": [586, 352],
+  "Anterior Mandibular first molar": [613, 415], "Posterior Mandibular first molar": [579, 408],
+  "Mandibular first root": [577, 456], "Soft tissue glabella": [698, 82], "Soft tissue nasion": [690, 162],
+  "Pronasale": [770, 308], "Subnasale": [726, 337], "Soft tissue subspinale": [733, 367],
+  "Labrale superius": [744, 392], "Stomion": [724, 413], "Labrale inferius": [738, 434],
+  "Soft tissue submentale": [714, 463], "Soft tissue pogonion": [716, 526], "Soft tissue gnathion": [705, 549]}
 
 
-// S0015
-var landmarkCoords = {"Nasion": [1254, 789], "Sella": [809, 844], "Porion": [647, 968], 
-  "Pterygoid point": [931, 991], "Basion": [654, 1140], "Articulare": [701, 1087], 
-  "Orbitale": [1202, 997], "ANS": [1266, 1199], "PNS": [954, 1170], "Point A": [1244, 1243], 
-  "Prosthion": [1282, 1345], "Incision superius apicalis": [1244, 1305], 
-  "Incision superius incisalis": [1288, 1409], "Incision inferius incisalis": [1238, 1411], 
-  "Incision inferius apicalis": [1171, 1509], "Infradentale": [1226, 1468], "Point B": [1186, 1529], 
-  "Pogonion": [1176, 1637], "Gnathion": [1160, 1670], "Menton": [1125, 1682], "Gonion": [719, 1447], 
-  "Anterior Maxillary first molar": [1076, 1368], "Posterior Maxillary first molar": [1010, 1339], 
-  "Maxillary first root": [1047, 1246], "Anterior Mandibular first molar": [1091, 1388], 
-  "Posterior Mandibular first molar": [1018, 1366], "Mandibular first root": [995, 1468], 
-  "Soft tissue glabella": [1328, 679], "Soft tissue nasion": [1298, 854], "Pronasale": [1424, 1150], 
-  "Subnasale": [1328, 1231], "Soft tissue subspinale": [1344, 1296], "Labrale superius": [1373, 1356], 
-  "Stomion": [1308, 1413], "Labrale inferius": [1342, 1478], "Soft tissue submentale": [1280, 1529], 
-  "Soft tissue pogonion": [1259, 1651], "Soft tissue gnathion": [1231, 1700]}
+// // S0014
+// var landmarkCoords = {"Nasion": [1292, 928], "Sella": [868, 915], "Porion": [664, 1023], 
+//   "Pterygoid point": [933, 1074], "Basion": [638, 1184], "Articulare": [698, 1133], "Orbitale": [1207, 1101], 
+//   "ANS": [1279, 1305], "PNS": [938, 1260], "Point A": [1246, 1339], "Prosthion": [1269, 1423], 
+//   "Incision superius apicalis": [1233, 1384], "Incision superius incisalis": [1267, 1494], 
+//   "Incision inferius incisalis": [1231, 1455], "Incision inferius apicalis": [1181, 1559], 
+//   "Infradentale": [1225, 1513], "Point B": [1197, 1590], "Pogonion": [1205, 1680], "Gnathion": [1189, 1714], 
+//   "Menton": [1140, 1721], "Gonion": [685, 1464], "Anterior Maxillary first molar": [1096, 1437], 
+//   "Posterior Maxillary first molar": [1026, 1417], "Maxillary first root": [1060, 1321], 
+//   "Anterior Mandibular first molar": [1091, 1458], "Posterior Mandibular first molar": [1016, 1435], 
+//   "Mandibular first root": [1000, 1529], "Soft tissue glabella": [1355, 819], "Soft tissue nasion": [-1, -1], 
+//   "Pronasale": [1460, 1262], "Subnasale": [1355, 1339], "Soft tissue subspinale": [1355, 1386], 
+//   "Labrale superius": [1375, 1429], "Stomion": [1313, 1478], "Labrale inferius": [1345, 1525], 
+//   "Soft tissue submentale": [1290, 1572], "Soft tissue pogonion": [1283, 1698], "Soft tissue gnathion": [1254, 1749]}
+
+
+
+// // S0015
+// var landmarkCoords = {"Nasion": [1254, 789], "Sella": [809, 844], "Porion": [647, 968], 
+//   "Pterygoid point": [931, 991], "Basion": [654, 1140], "Articulare": [701, 1087], 
+//   "Orbitale": [1202, 997], "ANS": [1266, 1199], "PNS": [954, 1170], "Point A": [1244, 1243], 
+//   "Prosthion": [1282, 1345], "Incision superius apicalis": [1244, 1305], 
+//   "Incision superius incisalis": [1288, 1409], "Incision inferius incisalis": [1238, 1411], 
+//   "Incision inferius apicalis": [1171, 1509], "Infradentale": [1226, 1468], "Point B": [1186, 1529], 
+//   "Pogonion": [1176, 1637], "Gnathion": [1160, 1670], "Menton": [1125, 1682], "Gonion": [719, 1447], 
+//   "Anterior Maxillary first molar": [1076, 1368], "Posterior Maxillary first molar": [1010, 1339], 
+//   "Maxillary first root": [1047, 1246], "Anterior Mandibular first molar": [1091, 1388], 
+//   "Posterior Mandibular first molar": [1018, 1366], "Mandibular first root": [995, 1468], 
+//   "Soft tissue glabella": [1328, 679], "Soft tissue nasion": [1298, 854], "Pronasale": [1424, 1150], 
+//   "Subnasale": [1328, 1231], "Soft tissue subspinale": [1344, 1296], "Labrale superius": [1373, 1356], 
+//   "Stomion": [1308, 1413], "Labrale inferius": [1342, 1478], "Soft tissue submentale": [1280, 1529], 
+//   "Soft tissue pogonion": [1259, 1651], "Soft tissue gnathion": [1231, 1700]}
 
 
 
