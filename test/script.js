@@ -442,6 +442,10 @@ const points = [
     { x: landmarkCoords['Soft tissue gnathion'][0],
       y: landmarkCoords['Soft tissue gnathion'][1] },
     
+      // 곡선을 만들어 주기 위한 임의의 point : Soft Tissue Gnathion의 살짝 왼쪽 아래 지점
+    { x: landmarkCoords['Soft tissue gnathion'][0] - 7*ratio,
+      y: landmarkCoords['Soft tissue gnathion'][1] + 7*ratio},
+    
 ];
 
 
@@ -669,161 +673,58 @@ const points8 = [
 
 
 ////////////////////////////////////
-
-
-// Maxilla 1st molar 왼쪽 절반
+// Porion 주변 원을 그리는 부분
+// Porion에서 시작해서, 아래 방향으로 원을 그리도록 함.
 const points9 = [
-  // 중점 부분에서 스타트
-  { x: (a_max[0] + p_max[0]) / 2,
-    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
-  { x: (a_max[0] + p_max[0]) / 2 - 3*ratio,
-    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
-  
-  // p_max 부근에서의 둥근 부분을 만들어 주는 작업
-  { x: p_max[0] + 2*ratio,
-    y: p_max[1] + 2*ratio},
-  { x: p_max[0],
-    y: p_max[1] },
-  { x: p_max[0] - 2*ratio,
-    y: p_max[1] - 5*ratio },
-  
-  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
-  { x: ((p_max[0] - 2*ratio) + (max_1st[0] - 2*ratio)) / 2 + 3*ratio,
-    y: ((p_max[1] - 5*ratio) + (max_1st[1] + 2*ratio)) / 2 },
-  { x: max_1st[0] - 2*ratio,
-    y: max_1st[1] + 2*ratio },
-  { x: max_1st[0],
-    y: max_1st[1] },
-  { x: max_1st[0] + 2*ratio,
-    y: max_1st[1] + 2*ratio },
-  
-  // 안쪽 중점까지
-  // (max_1st[0] + findRightTop(max_1st, p_max, a_max)[0]) / 2 : 중점의 x좌표
-  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2) - 2*ratio,
-    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
-  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2),
-    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
+  { x: landmarkCoords['Porion'][0],
+    y: landmarkCoords['Porion'][1] },
+  { x: landmarkCoords['Porion'][0] + 3*ratio,
+    y: landmarkCoords['Porion'][1] },
+  { x: landmarkCoords['Porion'][0] + 5*ratio,
+    y: landmarkCoords['Porion'][1] + 3*ratio },
+  { x: landmarkCoords['Porion'][0] + 10*ratio,
+    y: landmarkCoords['Porion'][1] + 10*ratio },
+  { x: landmarkCoords['Porion'][0] + 5*ratio,
+    y: landmarkCoords['Porion'][1] + 17*ratio },
+  { x: landmarkCoords['Porion'][0],
+    y: landmarkCoords['Porion'][1] + 20*ratio },
+  { x: landmarkCoords['Porion'][0] - 5*ratio,
+    y: landmarkCoords['Porion'][1] + 17*ratio },
+  { x: landmarkCoords['Porion'][0] - 10*ratio,
+    y: landmarkCoords['Porion'][1] + 10*ratio },
+  { x: landmarkCoords['Porion'][0] - 5*ratio,
+    y: landmarkCoords['Porion'][1] + 3*ratio },
+  { x: landmarkCoords['Porion'][0] - 3*ratio,
+    y: landmarkCoords['Porion'][1] },
+   { x: landmarkCoords['Porion'][0],
+    y: landmarkCoords['Porion'][1] },
 ]
 
-// Maxilla 1st molar 오른쪽 절반
+
+// Orbitale 주변 곡선을 그리는 부분
 const points10 = [
-  // 중점 부분에서 스타트
-  { x: (a_max[0] + p_max[0]) / 2,
-    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
-  { x: (a_max[0] + p_max[0]) / 2 + 3*ratio,
-    y: (a_max[1] + p_max[1]) / 2 - 3*ratio },
-  
-  // a_max 부근에서의 둥근 부분을 만들어 주는 작업
-  { x: a_max[0] - 4*ratio,
-    y: a_max[1] - 2*ratio},
-  { x: a_max[0],
-    y: a_max[1] },
-  { x: a_max[0] + 1*ratio,
-    y: a_max[1] + 2*ratio },
-  { x: a_max[0] + 5*ratio,
-    y: a_max[1] - 1*ratio },
-  
-  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
-  // findRightTop 함수 사용
-  { x: ((a_max[0] + 5*ratio) + findRightTop(max_1st, p_max, a_max)[0]) / 2 + 3*ratio,
-    y: ((a_max[1] - 5*ratio) + findRightTop(max_1st, p_max, a_max)[1]) / 2 - 10*ratio },
-  { x: (findRightTop(max_1st, p_max, a_max)[0]) + 3*ratio,
-    y: (findRightTop(max_1st, p_max, a_max)[1]) + 2*ratio },
-  { x: (findRightTop(max_1st, p_max, a_max)[0]),
-    y: (findRightTop(max_1st, p_max, a_max)[1]) },
-  { x: (findRightTop(max_1st, p_max, a_max)[0]) - 1*ratio,
-    y: (findRightTop(max_1st, p_max, a_max)[1]) + 2*ratio},
-
-  // 안쪽 중점까지
-  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2) + 2*ratio,
-    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
-  { x: ((max_1st[0] + 2*ratio + findRightTop(max_1st, p_max, a_max)[0]) / 2),
-    y: ((max_1st[1] + 2*ratio + findRightTop(max_1st, p_max, a_max)[1]) / 2 + 10*ratio) },
+  { x: landmarkCoords['Orbitale'][0] - 15*ratio,
+    y: landmarkCoords['Orbitale'][1] - 70*ratio},
+  { x: landmarkCoords['Orbitale'][0] - 17*ratio,
+    y: landmarkCoords['Orbitale'][1] - 50*ratio},
+  { x: landmarkCoords['Orbitale'][0] - 16*ratio,
+    y: landmarkCoords['Orbitale'][1] - 30*ratio},
+  { x: landmarkCoords['Orbitale'][0] - 15*ratio,
+    y: landmarkCoords['Orbitale'][1] - 20*ratio},
+  { x: landmarkCoords['Orbitale'][0] - 10*ratio,
+    y: landmarkCoords['Orbitale'][1] - 5*ratio },
+  { x: landmarkCoords['Orbitale'][0],
+    y: landmarkCoords['Orbitale'][1] },
+  { x: landmarkCoords['Orbitale'][0] + 5*ratio,
+    y: landmarkCoords['Orbitale'][1] - 3*ratio },
 ]
-
-
-/////////////
-// 위의 points9, points10의 구조를 상하 대칭의 구조로, mandibular 1st molar를 위한 point11, point12 제작
-
-// Mandibular 1st molar 왼쪽 절반 (상하대칭)
-const points11 = [
-  // 중점 부분에서 스타트
-  { x: (a_man[0] + p_man[0]) / 2,
-    y: (a_man[1] + p_man[1]) / 2 + 5*ratio },
-  { x: (a_man[0] + p_man[0]) / 2 - 3*ratio,
-    y: (a_man[1] + p_man[1]) / 2 + 3*ratio },
-  
-  // p_man 부근에서의 둥근 부분을 만들어 주는 작업
-  { x: p_man[0] + 2*ratio,
-    y: p_man[1] + 2*ratio},
-  { x: p_man[0],
-    y: p_man[1] },
-  { x: p_man[0] - 2*ratio,
-    y: p_man[1] + 5*ratio },
-  
-  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
-  { x: ((p_man[0] - 2*ratio) + (man_1st[0] - 2*ratio)) / 2 + 3*ratio,
-    y: ((p_man[1] + 5*ratio) + (man_1st[1] - 2*ratio)) / 2 },
-  { x: man_1st[0] - 2*ratio,
-    y: man_1st[1] - 2*ratio },
-  { x: man_1st[0],
-    y: man_1st[1] },
-  { x: man_1st[0] + 2*ratio,
-    y: man_1st[1] - 2*ratio },
-  
-  // 안쪽 중점까지
-  // (man_1st[0] + findRightTop(man_1st, p_man, a_man)[0]) / 2 : 중점의 x좌표
-  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2) - 2*ratio,
-    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
-  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2),
-    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
-]
-
-// Mandibular 1st molar 오른쪽 절반 (상하대칭)
-const points12 = [
-  // 중점 부분에서 스타트
-  { x: (a_man[0] + p_man[0]) / 2,
-    y: (a_man[1] + p_man[1]) / 2 + 5*ratio },
-  { x: (a_man[0] + p_man[0]) / 2 + 3*ratio,
-    y: (a_man[1] + p_man[1]) / 2 + 3*ratio },
-  
-  // a_man 부근에서의 둥근 부분을 만들어 주는 작업
-  { x: a_man[0] - 2*ratio,
-    y: a_man[1] },
-  { x: a_man[0],
-    y: a_man[1] },
-  { x: a_man[0] + 6*ratio,
-    y: a_man[1] + 1*ratio },
-  { x: a_man[0] + 5*ratio,
-    y: a_man[1] + 5*ratio },
-  
-  // 둥근 부분 이후 1st root까지 쭉 내려 주는 부분
-  // findRightTop 함수 사용
-  { x: ((a_man[0] + 5*ratio) + findRightTop(man_1st, p_man, a_man)[0]) / 2 + 3*ratio,
-    y: ((a_man[1] + 5*ratio) + findRightTop(man_1st, p_man, a_man)[1]) / 2 + 10*ratio },
-  { x: (findRightTop(man_1st, p_man, a_man)[0]) + 3*ratio,
-    y: (findRightTop(man_1st, p_man, a_man)[1]) - 2*ratio },
-  { x: (findRightTop(man_1st, p_man, a_man)[0]),
-    y: (findRightTop(man_1st, p_man, a_man)[1]) },
-  { x: (findRightTop(man_1st, p_man, a_man)[0]) - 1*ratio,
-    y: (findRightTop(man_1st, p_man, a_man)[1]) - 2*ratio },
-
-  // 안쪽 중점까지
-  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2) + 2*ratio,
-    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
-  { x: ((man_1st[0] + 2*ratio + findRightTop(man_1st, p_man, a_man)[0]) / 2),
-    y: ((man_1st[1] - 2*ratio + findRightTop(man_1st, p_man, a_man)[1]) / 2 - 10*ratio) },
-]
-
 
 
 /////////////////////////////////////////////////
-// contours_list = [points, points2, points3, points4,
-//   points5, points6, points7, points8,
-//   points9, points10, points11, points12]
 
 contours_list = [points, points4,
-  points5, points6, points7, points8]
+  points5, points6, points7, points8,
+  points9, points10];
 
 ctx.lineWidth = strokeWidth;
 
@@ -1014,6 +915,25 @@ incisor_inferius_2 = applyAffineTransform(
 
 ctx.lineWidth = strokeWidth * (Math.sqrt((500 - 410)**2 + (740 - 860)**2) / Math.sqrt((landmarkCoords['Infradentale'][0] - landmarkCoords['Incision inferius apicalis'][0])**2 + (landmarkCoords['Infradentale'][1] - landmarkCoords['Incision inferius apicalis'][1])**2));
 ctx.stroke(incisor_inferius_2);
+
+
+
+
+// // Porion 근처의 둥근 부분
+// const porion_track_data =
+// `M 420 260 
+// A 50 50 0 1 1 370 300 
+// Q 380 260 420 260 `
+
+// const porion_path = new Path2D(porion_track_data);
+
+// ctx.save();
+// // track을 porion 근처로 이동 (420, 260 지점을 landmark Porion 위치로 맞춤)
+// ctx.translate(landmarkCoords['Porion'][0] - 420, landmarkCoords['Porion'][1] - 260);
+
+// // ctx.lineWidth = strokeWidth;
+// ctx.stroke(porion_path);
+// // ctx.restore();
 
 
 
