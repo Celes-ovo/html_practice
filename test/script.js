@@ -679,7 +679,7 @@ const points9 = [
   { x: landmarkCoords['Porion'][0],
     y: landmarkCoords['Porion'][1] },
   { x: landmarkCoords['Porion'][0] + 3*ratio,
-    y: landmarkCoords['Porion'][1] },
+    y: landmarkCoords['Porion'][1] + 1*ratio},
   { x: landmarkCoords['Porion'][0] + 5*ratio,
     y: landmarkCoords['Porion'][1] + 3*ratio },
   { x: landmarkCoords['Porion'][0] + 10*ratio,
@@ -695,7 +695,7 @@ const points9 = [
   { x: landmarkCoords['Porion'][0] - 5*ratio,
     y: landmarkCoords['Porion'][1] + 3*ratio },
   { x: landmarkCoords['Porion'][0] - 3*ratio,
-    y: landmarkCoords['Porion'][1] },
+    y: landmarkCoords['Porion'][1] + 1*ratio},
    { x: landmarkCoords['Porion'][0],
     y: landmarkCoords['Porion'][1] },
 ]
@@ -703,6 +703,8 @@ const points9 = [
 
 // Orbitale 주변 곡선을 그리는 부분
 const points10 = [
+  { x: landmarkCoords['Orbitale'][0] - 10*ratio,
+    y: landmarkCoords['Orbitale'][1] - 80*ratio},
   { x: landmarkCoords['Orbitale'][0] - 15*ratio,
     y: landmarkCoords['Orbitale'][1] - 70*ratio},
   { x: landmarkCoords['Orbitale'][0] - 17*ratio,
