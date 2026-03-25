@@ -669,6 +669,10 @@ const points8 = [
   // { x: 87, y: 210 },
   { x: landmarkCoords['Articulare'][0],
     y: landmarkCoords['Articulare'][1] },
+
+  // Articulare 이후 부분을 표시하기 위한 test 추가점
+  { x: landmarkCoords['Articulare'][0] - 2*ratio,
+    y: landmarkCoords['Articulare'][1] - 5*ratio},
 ]
 
 
