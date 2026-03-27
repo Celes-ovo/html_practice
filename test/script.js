@@ -683,44 +683,44 @@ const points8 = [
 const points9 = [
   { x: landmarkCoords['Porion'][0],
     y: landmarkCoords['Porion'][1] },
-  { x: landmarkCoords['Porion'][0] + 3*ratio,
-    y: landmarkCoords['Porion'][1] + 1*ratio},
-  { x: landmarkCoords['Porion'][0] + 5*ratio,
-    y: landmarkCoords['Porion'][1] + 3*ratio },
+  { x: landmarkCoords['Porion'][0] + 3*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 1*(ratio * 0.75)},
+  { x: landmarkCoords['Porion'][0] + 5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 3*(ratio * 0.75) },
   
   ///////////////////
-  { x: landmarkCoords['Porion'][0] + 7.5*ratio,
-    y: landmarkCoords['Porion'][1] + 5*ratio },
-  { x: landmarkCoords['Porion'][0] + 10*ratio,
-    y: landmarkCoords['Porion'][1] + 10*ratio },
-  { x: landmarkCoords['Porion'][0] + 7.5*ratio,
-    y: landmarkCoords['Porion'][1] + 15*ratio },
+  { x: landmarkCoords['Porion'][0] + 7.5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 5*(ratio * 0.75) },
+  { x: landmarkCoords['Porion'][0] + 10*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 10*(ratio * 0.75) },
+  { x: landmarkCoords['Porion'][0] + 7.5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 15*(ratio * 0.75) },
   ///////////////////
 
 
   
-  { x: landmarkCoords['Porion'][0] + 5*ratio,
-    y: landmarkCoords['Porion'][1] + 17.5*ratio },
+  { x: landmarkCoords['Porion'][0] + 5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 17.5*(ratio * 0.75) },
   { x: landmarkCoords['Porion'][0],
-    y: landmarkCoords['Porion'][1] + 20*ratio },
-  { x: landmarkCoords['Porion'][0] - 5*ratio,
-    y: landmarkCoords['Porion'][1] + 17.5*ratio },
+    y: landmarkCoords['Porion'][1] + 20*(ratio * 0.75) },
+  { x: landmarkCoords['Porion'][0] - 5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 17.5*(ratio * 0.75) },
 
   
   ///////////////////
-  { x: landmarkCoords['Porion'][0] - 7.5*ratio,
-    y: landmarkCoords['Porion'][1] + 15*ratio },
-  { x: landmarkCoords['Porion'][0] - 10*ratio,
-    y: landmarkCoords['Porion'][1] + 10*ratio },
-  { x: landmarkCoords['Porion'][0] - 7.5*ratio,
-    y: landmarkCoords['Porion'][1] + 5*ratio },
+  { x: landmarkCoords['Porion'][0] - 7.5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 15*(ratio * 0.75) },
+  { x: landmarkCoords['Porion'][0] - 10*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 10*(ratio * 0.75) },
+  { x: landmarkCoords['Porion'][0] - 7.5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 5*(ratio * 0.75) },
   ///////////////////
 
   
-  { x: landmarkCoords['Porion'][0] - 5*ratio,
-    y: landmarkCoords['Porion'][1] + 3*ratio },
-  { x: landmarkCoords['Porion'][0] - 3*ratio,
-    y: landmarkCoords['Porion'][1] + 1*ratio},
+  { x: landmarkCoords['Porion'][0] - 5*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 3*(ratio * 0.75) },
+  { x: landmarkCoords['Porion'][0] - 3*(ratio * 0.75),
+    y: landmarkCoords['Porion'][1] + 1*(ratio * 0.75)},
    { x: landmarkCoords['Porion'][0],
     y: landmarkCoords['Porion'][1] },
 ]
